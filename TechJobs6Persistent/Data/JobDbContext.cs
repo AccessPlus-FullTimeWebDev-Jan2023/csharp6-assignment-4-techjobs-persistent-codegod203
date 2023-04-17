@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TechJobs6Persistent.Models;
 using TechJobs6Persistent.Controllers;
+using Microsoft.AspNetCore.Components.Routing;
 
 namespace TechJobs6Persistent.Data
 {
-	public class JobDbContext : DbContext
-	{
+    public class JobDbContext : DbContext
+    {
         public DbSet<Job>? Jobs { get; set; }
         public DbSet<Employer>? Employers { get; set; }
         public DbSet<Skill>? Skills { get; set; }
@@ -21,8 +22,12 @@ namespace TechJobs6Persistent.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //set up your connection for one to many (employer to jobs)
+            modelBuilder.Entity<Job>()
+                .HasOne(p => p.Employer)
+                .WithMany(b => b.Jobs);
 
             //set up your connection for many to many (skills to jobs)
         }
     }
 }
+
